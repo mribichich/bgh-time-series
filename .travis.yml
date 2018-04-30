@@ -1,0 +1,35 @@
+sudo: required
+
+language: node_js
+node_js:
+ - "node"
+
+services:
+  - docker
+
+env:
+  - IMAGE_TAG=mribichich/bgh-demo
+
+cache:
+  yarn: true
+
+stages:
+  - build
+  # - test
+  # - deploy
+
+jobs:
+  include:
+    - stage: build
+      # install:
+      #   - yarn
+      before_install:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        # - docker pull $IMAGE_TAG
+      script: 
+        - docker build -f Dockerfile -t $IMAGE_TAG .
+        - docker push $IMAGE_TAG
+    # - # stage name not required, will continue to use `test`
+    #   script: ./test 2
+    # - stage: deploy
+    #   script: ./deploy
