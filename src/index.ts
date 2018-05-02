@@ -22,9 +22,11 @@ process.on('SIGINT', function() {
 
   await listen(config.serviceHost, config.servicePort);
 
-  await main();
+  const interval = config.interval + (Math.random() > 0.5 ? +1 : -1) * (config.interval * 0.2) * Math.random();
 
-  const interval = config.interval + (Math.random() > 0.5 ? +1 : -1) * (config.interval * 0.1);
+  logger.info(`interval: ${interval}`);
+
+  await main();
 
   setInterval(async () => {
     await main();
