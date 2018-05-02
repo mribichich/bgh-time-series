@@ -24,9 +24,11 @@ process.on('SIGINT', function() {
 
   await main();
 
+  const interval = config.interval + (Math.random() > 0.5 ? +1 : -1) * (config.interval * 0.1);
+
   setInterval(async () => {
     await main();
-  }, 1000 * config.interval);
+  }, 1000 * interval);
 })();
 
 async function main() {
