@@ -25,4 +25,6 @@ COPY --from=build /app .
 
 ENV NODE_ENV=production
 
+EXPOSE 56178
+
 CMD [ "node", "index" ]

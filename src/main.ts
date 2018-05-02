@@ -9,7 +9,10 @@ type Options = {
   influxDbDatabase: string;
   influxDbUser?: string;
   influxDbPassword?: string;
-  pointsAmount: number;
+
+  sites: number;
+  devicesPerSite: number;
+  pointsPerDevice: number;
 };
 
 type Point = {
@@ -20,11 +23,15 @@ type Point = {
 };
 
 export default async function(options: Options) {
-  logger.debug(`Inserting ${options.pointsAmount} points into influxdb...`);
+  const { sites, devicesPerSite, pointsPerDevice } = options;
+
+  const TOTAL_POINTS = options.sites * options.devicesPerSite * options.pointsPerDevice;
+
+  logger.debug(`Inserting ${TOTAL_POINTS} points into influxdb...`);
 
   const url = `http://${options.influxDbHost}:${options.influxDbPort}/write?db=${options.influxDbDatabase}`;
 
-  const points = getPoints(options.pointsAmount);
+  const points = getPoints(sites, devicesPerSite, pointsPerDevice);
 
   const data = encodePoints(points);
 
@@ -39,24 +46,27 @@ export default async function(options: Options) {
   }
 }
 
-function getPoints(amount: number) {
-  const TOTAL_SITES = 10;
-  // const TOTAL_DEVICES = 100;
-  const TOTAL_POINTS = 5;
+function getPoints(sites: number, devicesPerSite: number, pointsPerDevice: number) {
+  // const TOTAL_SITES = 10;
+  // // const TOTAL_DEVICES = 100;
+  // const TOTAL_POINTS = 5;
 
-  const TOTAL_DEVICES = Math.floor(amount / (TOTAL_SITES * TOTAL_POINTS));
+  // const TOTAL_DEVICES = Math.floor(amount / (TOTAL_SITES * TOTAL_POINTS));
 
-  const sites = range(0, TOTAL_SITES + 1);
-  const devices = range(0, TOTAL_DEVICES + 1);
-  const points = range(0, TOTAL_POINTS + 1);
+  const siteIds = range(0, sites + 1);
+  const deviceIds = range(0, devicesPerSite + 1);
+  const pointIds = range(0, pointsPerDevice + 1);
 
   const flatten = <T>(list: T[]) => reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [], list);
 
   return flatten(
     map(
       site =>
-        map(device => map(point => ({ site, device, point, value: Math.random() * (1000 - 0) + 0 }), points), devices),
-      sites
+        map(
+          device => map(point => ({ site, device, point, value: Math.random() * (1000 - 0) + 0 }), pointIds),
+          deviceIds
+        ),
+      siteIds
     )
   );
 }

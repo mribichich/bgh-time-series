@@ -37,7 +37,9 @@ async function main() {
       influxDbDatabase: config.influxDbDatabase,
       influxDbUser: config.influxDbUser,
       influxDbPassword: config.influxDbPassword,
-      pointsAmount: config.pointsAmount
+      sites: config.sites,
+      devicesPerSite: config.devicesPerSite,
+      pointsPerDevice: config.pointsPerDevice
     });
   } catch (err) {
     logger.error(err, { error: err });

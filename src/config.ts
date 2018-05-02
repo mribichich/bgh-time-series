@@ -8,11 +8,12 @@ interface Config {
   influxDbUser?: string;
   influxDbPassword?: string;
 
-  /** Amount of points to insert  */
-  pointsAmount: number;
-
   /** Seconds */
   interval: number;
+
+  sites: number;
+  devicesPerSite: number;
+  pointsPerDevice: number;
 }
 
 function defaultTo(...args) {
@@ -35,8 +36,11 @@ const DEFAULT_CONFIG: Config = {
   influxDbUser: null,
   influxDbPassword: null,
 
-  pointsAmount: 100,
-  interval: 60
+  interval: 60,
+
+  sites: 10,
+  devicesPerSite: 100,
+  pointsPerDevice: 5
 };
 
 let config: Config = {
@@ -55,11 +59,17 @@ let config: Config = {
   influxDbUser: defaultTo(DEFAULT_CONFIG.influxDbUser, process.env.INFLUXDB_USER),
   influxDbPassword: defaultTo(DEFAULT_CONFIG.influxDbPassword, process.env.INFLUXDB_PASSWORD),
 
-  pointsAmount: defaultTo(
-    DEFAULT_CONFIG.pointsAmount,
-    process.env.POINTS_AMOUNT ? parseInt(process.env.POINTS_AMOUNT) : null
+  interval: defaultTo(DEFAULT_CONFIG.interval, process.env.INTERVAL ? parseInt(process.env.INTERVAL) : null),
+
+  sites: defaultTo(DEFAULT_CONFIG.sites, process.env.SITES ? parseInt(process.env.SITES) : null),
+  devicesPerSite: defaultTo(
+    DEFAULT_CONFIG.devicesPerSite,
+    process.env.DEVICES_PER_SITE ? parseInt(process.env.DEVICES_PER_SITE) : null
   ),
-  interval: defaultTo(DEFAULT_CONFIG.interval, process.env.INTERVAL ? parseInt(process.env.INTERVAL) : null)
+  pointsPerDevice: defaultTo(
+    DEFAULT_CONFIG.pointsPerDevice,
+    process.env.POINTS_PER_DEVICE ? parseInt(process.env.POINTS_PER_DEVICE) : null
+  )
 };
 
 export default Object.freeze(config);
