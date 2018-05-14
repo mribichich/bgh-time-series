@@ -1,2 +1,78 @@
 # bgh-time-series
+
 Time series inserter to influxdb for BGH demo
+
+## Configuration
+
+### Environment Variables
+
+.env file
+
+```
+SERVICE_HOST=0.0.0.0
+SERVICE_PORT=56178
+
+INFLUXDB_HOST=192.168.100.101
+INFLUXDB_PORT=8086
+INFLUXDB_DATABASE=bgh_demo_1
+INFLUXDB_USERNAME=
+INFLUXDB_PASSWORD=
+
+INTERVAL=60
+
+SITES=10
+DEVICES_PER_SITE=100
+POINTS_PER_DEVICE=5
+```
+
+## Api
+
+### Config
+
+* `GET: /config`
+
+  * Response:
+
+    ```
+    SERVICE_HOST=0.0.0.0
+    SERVICE_PORT=56178
+
+    INFLUXDB_HOST=192.168.2.27
+    INFLUXDB_PORT=10025
+    INFLUXDB_DATABASE=bgh_demo_1
+    INFLUXDB_USERNAME=
+    INFLUXDB_PASSWORD=
+
+    INTERVAL=60
+
+    SITES=10
+    DEVICES_PER_SITE=100
+    POINTS_PER_DEVICE=5
+    ```
+
+* `POST: /config`
+
+  * Query:
+
+    ```
+    scale=10
+    ```
+
+  * Body:
+
+    ```
+    SERVICE_HOST=0.0.0.0
+    SERVICE_PORT=56178
+
+    INFLUXDB_HOST=192.168.2.27
+    INFLUXDB_PORT=10025
+    INFLUXDB_DATABASE=bgh_demo_1
+    INFLUXDB_USERNAME=
+    INFLUXDB_PASSWORD=
+
+    INTERVAL=60
+
+    SITES=10
+    DEVICES_PER_SITE=100
+    POINTS_PER_DEVICE=5
+    ```
